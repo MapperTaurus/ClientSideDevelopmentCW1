@@ -1,0 +1,9 @@
+extends layout
+
+block content
+  h1= title  
+  h2= "Coursework 1"
+  i= "/hostels"
+    p: #[span >>>] #[a(href="/hostels") /hostels] #[span <<<]
+    p: #[span >>>] #[a(href="/hostels.html") Hostels] #[span <<<]
+  p Welcome to #{title}
