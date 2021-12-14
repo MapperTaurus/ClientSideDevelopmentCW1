@@ -1,8 +1,8 @@
 
-console.log("Script running...");
+console.log("Script running... (hostels.js)");
 
-// class to represent todo items
-class ToDoItem {
+// class to represent the hostels
+class NewHostel {
     constructor(id, name, address, postcode, phone, email, description, ratings, rating, reviews){
         this.id = id;
         this.name = name;
@@ -17,7 +17,16 @@ class ToDoItem {
     }
 }
 
-async function gettodos()
+//class to represent the reviews for each hostel
+class NewReview {
+    constructor(id, reviewer, review){
+        this.id = id;
+        this.reviews.reviewer = reviewer;
+        this.reviews.review = review;
+    }
+}
+
+async function gethostels()
 {
     // make asynchrnous call to API and return response as JSON once completed
     let response = await fetch("/hostels")
@@ -34,17 +43,12 @@ async function showlist(data)
     // for each element in the data
     for (const item of data) {
         // create an object to represent the current item
-        let value = new ToDoItem(item.id, item.name, item.address, item.postcode, item.phone, item.email, item.description);
+        let value = new NewHostel(item.id, item.name, item.address, item.postcode, item.phone, item.email, item.description);
 
          // create LI element
         const node = document.createElement("li");     
 
-        // set line-through if item is done
-        if(value["done"]==true) {
-            node.style.textDecoration="line-through";
-        }
-
-        // create check box node and append to list item
+        // create text nodes and icons and append to list item
         const name_icon = document.createElement("i");
         name_icon.setAttribute("class", "fas fa-h-square");
         const name_icon_br = document.createElement("br");
@@ -76,8 +80,6 @@ async function showlist(data)
         const reviews_icon = document.createElement("i");
         reviews_icon.setAttribute("class", "fas fa-comments");
         const reviews_br = document.createElement("p");
-
-        // create text node and append to list item
 
         // const textnode_id = document.createTextNode("ID:" + value.id);  - ID (old method)
         const textnode_name = document.createTextNode("Name:" + value.name);
@@ -121,16 +123,17 @@ async function showlist(data)
     }
 }
 
-async function addtodo(e) {
-    // stop the regular form submission
-    e.preventDefault();
+async function addreview(e) {
 
     // get the data from input box in form and embed in object
-    const newtodo = document.getElementById("todo");
-    const data = new ToDoItem(newtodo.value, false);
+    const newreview = document.getElementById("hostels");
+    const data = new NewReview(newreview.value, reviews.reviewer, reviews.review);
 
     // clear input box
-    newtodo.value="";
+    newreview.value="";
+
+    // stop the regular form submission
+    e.preventDefault();
 
     // set up and make asynchronous POST to API endpoint
     const settings = {
@@ -143,82 +146,22 @@ async function addtodo(e) {
     await fetch("/hostels/add", settings);
 };
 
-async function setdone(){
-    // get array of check boxes in page
-    const checkboxes = document.getElementsByName("markdone");
-
-    // create array which will contain indexes of check box array which
-    // correspond to items with done=true
-    let checked = [];
-
-    // iterate through checkboxes and add index to array when done=true
-    for (i = 0; i < checkboxes.length; i++){
-        if (checkboxes[i].checked){
-            checked.push(i);
-        }
-    }
-
-    // set up and make asynchronous POST to API endpoint
-    const settings = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json;charset=UTF-8'
-        },
-        body: JSON.stringify(checked)
-    };
-    await fetch("/todos/setdone", settings);
-}
-
-async function cleartodos(){    
-    // url of API endpoint
-    const url = "/todos/clear";
-
-    // make asynchrnous call to API and return response as JSON once completed
-    await fetch(url)
-}
-
 async function searchhostel(){    
     // url of API endpoint
     const url = "/hostels/search/:term";
-
-    // make asynchrnous call to API and return response as JSON once completed
+        var selectedhostels = hostels.filter(function(hostel) {
+          var result = (hostel.address.toLowerCase().search(req.params["term"].toLowerCase())>=0) || 
+              (hostel.description.toLowerCase().search(req.params["term"].toLowerCase())>=0);
+          return result;
+        });
+        selectedhostels.length==0 ? res.status(404): res.status(200);
+        res.send(selectedhostels);
+      
     await fetch(url)
 }
 
 window.onload = function() {
-    gettodos()
+    gethostels()
     .then(data => showlist(data))
 }
 
-async function search(term)
-{
-
-}
-
-/* set event handlers
-window.onload = function(){
-    // get to do list items and display
-    gettodos()
-        .then(data => showlist(data))
-
-    // on form submit, add new to do item, get updated list of to do items, and display
-    document.getElementById("addtodo").addEventListener('submit', async(e) => {
-        addtodo(e)
-            .then(gettodos)
-            .then(data => showlist(data))
-    });
-
-    // on click set done button, send request to set done=true for selected items, get updated list of to do items, and display
-    document.getElementById("setdone").addEventListener('click', async(e) => {
-        setdone()
-            .then(gettodos)
-            .then(data => showlist(data))
-    });
-
-    // on click clear button, send request to clear list , get updated list of to do items, and display
-    document.getElementById("clear").addEventListener('click', async(e) => {
-        cleartodos()
-            .then(gettodos)
-            .then(data => showlist(data))
-    });
-} */
