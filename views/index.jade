@@ -1,9 +1,32 @@
 extends layout
 
+
 block content
   h1= title  
-  h2= "Coursework 1"
-  i= "/hostels"
-    p: #[span >>>] #[a(href="/hostels") /hostels] #[span <<<]
-    p: #[span >>>] #[a(href="/hostels.html") Hostels] #[span <<<]
-  p Welcome to #{title}
+
+
+
+
+
+        <h1>🏨 Hostels on the NC500 of Scotland</h1>
+        <h3>What is the NC500?</h3>
+        <i>The North Coast 500 is Scotland’s answer to Route 66. </br> A fantastic 500 mile road trip through the stunning scenery of </br> Scotland’s North West Highlands and along the dramatic Caithness coastline. </i>
+       
+
+       p
+        img.className#IdName(src="images/mountain.jpg" alt="NC500")
+
+
+        div.input
+            span.label <i class="fas fa-search"></i>
+
+            input(type="text", id="term", placeholder="Search for hostel...")
+        <ol id="hostels"></ol> 
+        <script src="javascripts/hostels.js" type="text/javascript" ></script>
+        <script src="javascripts/search.js" type="text/javascript" ></script>
+        <script src="javascripts/searchBar.js" type="text/babel" data-type="module" ></script>
+        <script src="https://kit.fontawesome.com/5c4ebf68fc.js" crossorigin="anonymous"></script>
+        
+
+
+
