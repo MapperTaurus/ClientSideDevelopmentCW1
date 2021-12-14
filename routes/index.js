@@ -47,7 +47,7 @@ var hostels = [
         "ratings": [3,5,4,4,2,4,4,4,5,5,1,2,4,3],
         "rating": 3.6,
         "reviews" : [
-            {"reviewer":"Ivan", "review": "Lovely views"},
+            {"reviewer":"Craig", "review": "Lovely views"},
             {"reviewer":"Ryan", "review": "Dog-friendly hostel"},
             {"reviewer":"Brigitta", "review": "Enjoyed the wee breakfast"}
         ]
